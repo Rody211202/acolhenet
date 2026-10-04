@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AcolheNet — Cidadania Digital</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+</head>
+<body>
+<div id="modeChooser" class="mode-chooser" role="dialog" aria-labelledby="modeTitle">
+  <div class="mode-card">
+    <div class="mode-logo"><span class="acolhe-mark" aria-hidden="true">⌁</span><strong>Acolhe<span>Net</span></strong></div>
+    <span class="eyebrow">CIDADANIA DIGITAL</span>
+    <h2 id="modeTitle">Como você prefere usar o AcolheNet?</h2>
+    <p>Escolha a opção que deixa o site mais confortável para você.</p>
+    <div class="mode-options">
+      <button class="mode-option" id="normalModeBtn" type="button">
+        <span class="mode-option-icon">🧑</span>
+        <strong>Modo padrão</strong>
+        <small>Interface completa do AcolheNet</small>
+      </button>
+      <button class="mode-option senior" id="seniorModeBtn" type="button">
+        <span class="mode-option-icon">👴</span>
+        <strong>Modo simplificado</strong>
+        <small>Texto maior, botões grandes e navegação mais simples</small>
+      </button>
+    </div>
+    <p class="mode-note">Você pode trocar o modo a qualquer momento.</p>
+  </div>
+</div>
+<div class="acolhenet-symbol" aria-label="AcolheNet">
+  <span class="acolhe-mark" aria-hidden="true">⌁</span>
+  <span class="acolhe-name">Acolhe<span>Net</span></span>
+</div>
+
+<header class="topbar">
+  <a class="logo" href="#inicio">🛡️ Acolhe<span>Net</span></a>
+  <nav><a href="#inicio">Início</a><a href="#sobre">Sobre</a><a href="#analisador">Analisar</a><a href="#seguranca">Segurança</a></nav>
+  <div class="top-actions"><button class="nav-btn" onclick="scrollToSection('analisador')">Analisar conversa</button><button class="accessibility-btn" id="changeModeBtn" type="button" aria-label="Trocar modo de visualização">👴 Modo simplificado</button></div>
+</header>
+
+<main>
+<section id="inicio" class="hero">
+  <div>
+    <div class="pill">CIDADANIA DIGITAL</div>
+    <h1>Identifique sinais de <span>golpes digitais.</span></h1>
+    <p>O AcolheNet usa OCR para ler o texto de um print e regras de segurança para verificar sinais que podem indicar uma tentativa de golpe.</p>
+    <div class="actions">
+      <button class="primary" onclick="scrollToSection('analisador')">📷 Analisar um print</button>
+      <button class="secondary" onclick="scrollToSection('seguranca')">Ver dicas</button>
+    </div>
+  </div>
+  <div class="hero-card"><div class="shield">🔎</div><h3></h3><p></p></div>
+</section>
+
+<section id="modoIdoso" class="senior-panel section" aria-label="Acesso rápido para modo simplificado">
+  <div class="senior-panel-inner">
+    <div>
+      <span class="eyebrow">MAIS ACESSÍVEL</span>
+      <h2>Prefere uma tela mais simples?</h2>
+      <p>Ative o Modo Simplificado para usar letras maiores, botões grandes e informações mais diretas.</p>
+    </div>
+    <button class="senior-activate" id="activateSeniorInline" type="button">👴 Ativar Modo Simplificado</button>
+  </div>
+</section>
+
+<section id="sobre" class="section">
+  <div class="section-title"><span class="eyebrow">COMO FUNCIONA</span><h2>Da imagem para a análise</h2><p>O sistema segue três etapas para reduzir falsos alertas.</p></div>
+  <div class="cards">
+    <article><div class="icon">1️⃣</div><h3>OCR</h3><p>Extrai o texto que aparece no print.</p></article>
+    <article><div class="icon">2️⃣</div><h3>Regras</h3><p>Procura padrões relacionados a links, dinheiro, códigos, senhas e pressão.</p></article>
+    <article><div class="icon">3️⃣</div><h3>Resultado</h3><p>Mostra apenas os sinais que realmente foram encontrados no texto.</p></article>
+  </div>
+</section>
+
+<section id="analisador" class="analyzer-section">
+  <div class="section-title">
+    <span class="eyebrow">ANÁLISE DE CONVERSAS</span>
+    <h2>Envie um print</h2>
+    <p>O OCR funciona melhor quando o texto está nítido e com boa resolução.</p>
+  </div>
+
+  <div class="privacy-note"><strong>🔒 Privacidade:</strong> esconda nomes, telefones, CPF, endereço, fotos e outros dados pessoais antes de enviar.<br><small>O OCR e as regras são executados no navegador nesta versão. O texto não é enviado para um servidor do AcolheNet.</small></div>
+
+  <div class="upload-box" id="dropZone">
+    <input type="file" id="imageInput" accept="image/*" hidden>
+    <div class="upload-icon">📷</div><h3>Escolha ou arraste uma imagem</h3><p>PNG, JPG ou WEBP</p>
+    <button class="primary" id="chooseBtn">Escolher imagem</button>
+    <p class="drop-hint">Depois, o OCR vai extrair o texto para análise.</p>
+  </div>
+
+  <div id="previewArea" class="preview-area hidden">
+    <div class="preview-card">
+      <img id="previewImage" alt="Prévia do print">
+      <div class="preview-info">
+        <h3>Print selecionado</h3>
+        <p>Confira se não há informações pessoais visíveis.</p>
+        <button class="primary" id="analyzeBtn">🔍 Ler e analisar</button>
+        <button class="text-btn" id="removeBtn">Remover imagem</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="progress" class="progress hidden"><div class="progress-title"><span id="progressText">Preparando OCR...</span><span id="progressPercent">0%</span></div><div class="bar"><div id="barFill"></div></div></div>
+
+  <div id="result" class="result hidden">
+    <div class="result-header"><span id="resultBadge" class="badge">RESULTADO</span><h3 id="resultTitle"></h3><p id="resultIntro"></p></div>
+    <div id="signals" class="signals"></div>
+    <div id="ocrBox"><h4>📝 Texto identificado</h4><pre id="ocrText"></pre></div>
+    <div class="recommendation"><strong>Orientação</strong><p id="recommendationText"></p></div>
+    <button class="secondary" id="newAnalysisBtn">Analisar outro print</button>
+  </div>
+</section>
+
+<section id="seguranca" class="section">
+<div class="section-title"><span class="eyebrow">SEGURANÇA DIGITAL</span><h2>O que merece atenção?</h2></div>
+<div class="tips">
+<div class="tip"><span>🔑</span><div><h3>Senha e código</h3><p>Mensagens pedindo senha, código de verificação ou token são um sinal de alerta.</p></div></div>
+<div class="tip"><span>💸</span><div><h3>Dinheiro</h3><p>Pedidos inesperados de Pix, transferência ou pagamento devem ser verificados.</p></div></div>
+<div class="tip"><span>🔗</span><div><h3>Links</h3><p>Links inesperados podem levar a páginas falsas. Prefira acessar o serviço pelo aplicativo ou site oficial.</p></div></div>
+<div class="tip"><span>🚨</span><div><h3>Pressão</h3><p>Ameaças, urgência exagerada ou “faça agora” podem tentar impedir uma verificação.</p></div></div>
+</div></section>
+
+<section id="guiaSimplificado" class="section senior-only-guide">
+  <div class="section-title">
+    <span class="eyebrow">MODO SIMPLIFICADO</span>
+    <h2>Proteja-se de golpes</h2>
+    <p>Se você não conhece a pessoa ou a empresa, pare e confirme antes de agir.</p>
+  </div>
+  <div class="senior-tips">
+    <article><span>💸</span><div><h3>Pedem dinheiro?</h3><p>Não faça Pix ou pagamento com pressa. Confirme primeiro.</p></div></article>
+    <article><span>🔑</span><div><h3>Pedem senha ou código?</h3><p>Não passe senhas, códigos SMS ou tokens para ninguém.</p></div></article>
+    <article><span>🔗</span><div><h3>Mandaram um link?</h3><p>Não clique se você não tiver certeza de quem enviou.</p></div></article>
+    <article><span>📞</span><div><h3>Disseram ser do banco?</h3><p>Desligue e procure o banco pelo aplicativo ou telefone oficial.</p></div></article>
+  </div>
+  <div class="senior-help">
+    <strong>🛡️ Regra simples:</strong> se alguém estiver pressionando você para decidir rápido, pare e peça ajuda a uma pessoa de confiança.
+  </div>
+</section>
+
+<section class="section dark-section">
+<div class="section-title"><span class="eyebrow">CIDADANIA DIGITAL</span><h2>Informação antes da ação.</h2><p>O AcolheNet é uma ferramenta educativa. Um alerta não prova que uma mensagem é golpe; ele indica que vale a pena verificar.</p></div>
+</section>
+</main>
+<footer><strong>🛡️ AcolheNet</strong><span>Projeto escolar • Cidadania digital • 2026</span></footer>
+<script src="script.js"></script>
+<section class="golpes-section" id="golpes"><div class="section-heading"><span class="section-tag">GUIA DE SEGURANÇA</span><h2>Golpes em destaque</h2><p>Veja exemplos de golpes comuns e compare os sinais com a mensagem que você recebeu.</p></div><div class="golpes-grid">
+<article class="golpe-card"><div class="golpe-preview pix-preview"><div class="fake-chat"><div class="fake-title">Banco • Segurança</div><div class="fake-message">Sua conta será bloqueada hoje. Faça um PIX para regularizar seu acesso.</div><div class="fake-button">Regularizar agora</div></div></div><div class="golpe-content"><span class="golpe-label">Financeiro</span><h3>Falso pedido de PIX</h3><p>Mensagem que tenta pressionar a pessoa a enviar dinheiro rapidamente.</p><button class="golpe-btn" type="button" data-golpe="pix">Ver sinais</button></div></article>
+<article class="golpe-card"><div class="golpe-preview banco-preview"><div class="fake-chat"><div class="fake-title">Atendimento • Banco</div><div class="fake-message">Detectamos uma atividade suspeita. Informe o código recebido por SMS.</div><div class="fake-button">Informar código</div></div></div><div class="golpe-content"><span class="golpe-label">Personificação</span><h3>Falso suporte bancário</h3><p>Alguém se passa por uma empresa para tentar obter dados ou códigos.</p><button class="golpe-btn" type="button" data-golpe="banco">Ver sinais</button></div></article>
+<article class="golpe-card"><div class="golpe-preview premio-preview"><div class="fake-chat"><div class="fake-title">🎁 Prêmio especial</div><div class="fake-message">Parabéns! Você foi selecionado. Clique para resgatar seu prêmio.</div><div class="fake-button">Resgatar prêmio</div></div></div><div class="golpe-content"><span class="golpe-label">Falso prêmio</span><h3>Prêmio ou sorteio falso</h3><p>Promessas de prêmios inesperados usadas para atrair cliques ou dados.</p><button class="golpe-btn" type="button" data-golpe="premio">Ver sinais</button></div></article>
+<article class="golpe-card"><div class="golpe-preview entrega-preview"><div class="fake-chat"><div class="fake-title">Entrega • Atualização</div><div class="fake-message">Seu pedido está aguardando confirmação. Acesse o link para evitar o cancelamento.</div><div class="fake-button">Acessar pedido</div></div></div><div class="golpe-content"><span class="golpe-label">Link suspeito</span><h3>Falso problema na entrega</h3><p>Mensagens que usam uma entrega como motivo para levar a pessoa a um link.</p><button class="golpe-btn" type="button" data-golpe="entrega">Ver sinais</button></div></article></div>
+<div class="golpe-details" id="golpe-details" hidden><div class="golpe-details-head"><div><span class="section-tag">ANÁLISE DO EXEMPLO</span><h3 id="golpe-detail-title">Sinais de alerta</h3></div><button class="close-golpe" id="close-golpe" type="button">×</button></div><div id="golpe-detail-content"></div></div></section>
+</body>
+</html>
